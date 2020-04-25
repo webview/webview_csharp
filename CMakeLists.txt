@@ -34,6 +34,7 @@ link_directories("${webviewnative_SOURCE_DIR}/script/Microsoft.Web.WebView2.0.8.
 add_library(webview SHARED "${webviewnative_SOURCE_DIR}/webview.cc")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    target_compile_definitions(webview PRIVATE "WEBVIEW_API=__declspec(dllexport)")
     target_link_libraries(webview WebView2Loader.dll.lib)
     configure_file(${webviewnative_SOURCE_DIR}/script/Microsoft.Web.WebView2.0.8.355/build/x64/WebView2Loader.dll WebView2Loader.dll COPYONLY)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
