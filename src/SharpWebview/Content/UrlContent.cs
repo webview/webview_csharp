@@ -1,6 +1,6 @@
 namespace SharpWebview.Content
 {
-    public class UrlContent : IWebviewContent
+    public sealed class UrlContent : IWebviewContent
     {
         private readonly string _url;
 

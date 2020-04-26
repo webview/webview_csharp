@@ -3,7 +3,7 @@ using System.Text;
 
 namespace SharpWebview.Content
 {
-    public class HtmlContent : IWebviewContent
+    public sealed class HtmlContent : IWebviewContent
     {
         private readonly string _html;
 
