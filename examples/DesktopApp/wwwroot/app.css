@@ -1,0 +1,9 @@
+body {
+    background: black;
+}
+
+#answer {
+    margin: 15px;
+    padding: 25px;
+    background: white;
+}
