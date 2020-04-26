@@ -22,6 +22,7 @@ FetchContent_Declare(
     webviewNative
     GIT_REPOSITORY https://github.com/zserge/webview.git
     GIT_TAG 50e4bcc420abdc7be96a54b7c79934a000b76901
+    PATCH_COMMAND git apply ${PROJECT_SOURCE_DIR}/libs/000-WindowTitlebarIcon.patch
 )
 FetchContent_Populate(webviewNative)
 

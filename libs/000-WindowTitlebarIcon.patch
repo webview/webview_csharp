@@ -1,0 +1,48 @@
+From 445c82fa1086475c9bbecec6326a2844b76b2393 Mon Sep 17 00:00:00 2001
+From: Gerrit 'Geaz' Gazic <geaz@users.noreply.github.com>
+Date: Sun, 26 Apr 2020 08:30:22 +0200
+Subject: [PATCH] Add title bar icon for windows
+
+---
+ README.md | 3 ++-
+ webview.h | 8 ++++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/README.md b/README.md
+index ab708e8..b2541f2 100644
+--- a/README.md
++++ b/README.md
+@@ -81,7 +81,8 @@ example.app
+ 
+ Here, `Info.plist` is a [property list file](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/AboutInformationPropertyListFiles.html) and `*.icns` is a special icon format. You may convert PNG to icns [online](https://iconverticons.com/online/).
+ 
+-On Windows you probably would like to have a custom icon for your executable. It can be done by providing a resource file, compiling it and linking with it. Typically, `windres` utility is used to compile resources. Also, on Windows, `webview.dll` and `WebView2Loader.dll` must be placed into the same directory with your app executable.
++On Windows you probably would like to have a custom icon for your executable. It can be done by providing a resource file, compiling it and linking with it. Typically, `windres` utility is used to compile resources. To show a icon in the application title bar, just place a file named *icon.ico* next to the executable file.
++Also, on Windows, `webview.dll` and `WebView2Loader.dll` must be placed into the same directory with your app executable.
+ 
+ Also, if you want to cross-compile your webview app - use [xgo](https://github.com/karalabe/xgo).
+ 
+diff --git a/webview.h b/webview.h
+index 20ebe07..49e6479 100644
+--- a/webview.h
++++ b/webview.h
+@@ -937,11 +937,19 @@ class win32_edge_engine {
+ public:
+   win32_edge_engine(bool debug, void *window) {
+     if (window == nullptr) {
++      HICON icon = (HICON) LoadImage(
++        NULL, "icon.ico", IMAGE_ICON,
++        GetSystemMetrics(SM_CXSMICON), 
++        GetSystemMetrics(SM_CYSMICON), 
++        LR_LOADFROMFILE);
++
+       WNDCLASSEX wc;
+       ZeroMemory(&wc, sizeof(WNDCLASSEX));
+       wc.cbSize = sizeof(WNDCLASSEX);
+       wc.hInstance = GetModuleHandle(nullptr);
+       wc.lpszClassName = "webview";
++      wc.hIcon = icon;
++      wc.hIconSm = icon;
+       wc.lpfnWndProc =
+           (WNDPROC)(+[](HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) -> int {
+             auto w = (win32_edge_engine *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
