@@ -19,4 +19,4 @@ jobs:
     - name: Package nuget
       run: dotnet pack src\SharpWebview\SharpWebview.csproj --configuration Release
     - name: Push nuget
-      run: dotnet nuget push src\SharpWebview\bin\Release\*.nupkg -n -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
+      run: dotnet nuget push src\SharpWebview\bin\Release\*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate --no-symbols true
