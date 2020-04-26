@@ -1,0 +1,25 @@
+From 5f8333d49012286f876e82e137894aa213d1f83e Mon Sep 17 00:00:00 2001
+From: Gerrit 'Geaz' Gazic <geaz@users.noreply.github.com>
+Date: Sun, 26 Apr 2020 13:26:30 +0200
+Subject: [PATCH] Initialize point vars for windows
+
+In some occasions, if compiled in Release Mode, the variables m_minsz and m_maxsz were pointing to random memory. This caused weird effects on windows. From application crash to operating system crash.
+---
+ webview.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/webview.h b/webview.h
+index 20ebe07..33e9b99 100644
+--- a/webview.h
++++ b/webview.h
+@@ -1061,8 +1061,8 @@ class win32_edge_engine {
+   virtual void on_message(const std::string msg) = 0;
+ 
+   HWND m_window;
+-  POINT m_minsz;
+-  POINT m_maxsz;
++  POINT m_minsz = POINT { 0, 0 };
++  POINT m_maxsz = POINT { 0, 0 };
+   DWORD m_main_thread = GetCurrentThreadId();
+   std::unique_ptr<webview::browser> m_browser =
+       std::make_unique<webview::edge_chromium>();
