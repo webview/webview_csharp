@@ -66,15 +66,28 @@ Please have a look into the documented [*Program.cs*](https://github.com/geaz/sh
 
 Besides the *UrlContent* and *HtmlContent*, *sharpWebview* also provides a *HostedContent*. This content type creates a webserver to which the webview will automatically navigate.
 
-To use this content it is necessary to create a *wwwroot* folder in your project. Every file you put into this folder will be served by the *HostedContent*. The [*DesktopApp*](https://github.com/geaz/sharpWebview/tree/master/examples/DesktopApp) project is an example of the usage of this content type.
-Don't forget to set the files in the *wwwroot* folder to *copy always* (see project file for an example).
+To use this content it is necessary to create a *app* folder in your project. Every file you put into this folder will be served by the *HostedContent*. The [*DesktopApp*](https://github.com/geaz/sharpWebview/tree/master/examples/DesktopApp) project is an example of the usage of this content type.
+Don't forget to set the files in the *app* folder to *copy always* (see project file for an example).
 
 ### HostedContent on Windows systems
 
-The Edge webview uses a UWP application context on windows. This context disallowes loopbacks, if the application is not installed. For development purpose it is necessary to run the following command in an administrative command prompt:
+The Edge webview uses a UWP application context on windows. UWP applications disallow loopbacks. For development purpose it is necessary to run the following command in an administrative command prompt:
 
 ```
 CheckNetIsolation.exe LoopbackExempt -a -n="Microsoft.Win32WebViewHost_cw5n1h2txyewy"
 ```
 
-This adds the Edge Webview Host to the exception list of this limitation. If you want to ship your application, you have to provide a MSI installer. Only application installed on a windows system are not affected by this behaviour.
+This adds the Edge Webview Host to the exception list of this limitation. Your best bet for application distribution is to create an installer which executes this command on installation.
+
+# Application Distribution
+## Windows
+ 
+The [*DesktopApp*](https://github.com/geaz/sharpWebview/tree/master/examples/DesktopApp) example contains a simple script to create a MSI installer. You are able to take the *wix.bat* and *DesktopApp.wix* files as a starting point for your application. To use the *wix.bat* you need to install the WIX Toolset.
+
+I highly recommend to use [scoop](https://scoop.sh/) to install it. Scoop is a command line installer for easy installation of many different applications. Just run 
+
+```
+scoop install wixtoolset
+```
+
+to install WIX. After this you should be able to execute the *wix.bat* to create a basic installer for the example [*DesktopApp*](https://github.com/geaz/sharpWebview/tree/master/examples/DesktopApp).

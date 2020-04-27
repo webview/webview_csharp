@@ -3,3 +3,7 @@ obj/
 build/
 *.nupkg
 .vs/
+Files.wxs
+*.wixobj
+*.wixpdb
+*.msi

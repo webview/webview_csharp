@@ -1,0 +1,47 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <!-- Define your product information -->
+    <Product 
+        Id="979e841f-1007-43c8-a032-13fbf93ff3a1"
+        UpgradeCode="03afa2b5-e3c8-4cea-bcf1-fb4f516b3d1f"
+        Name="DesktopApp" Version="0.5.0.0" Manufacturer="SharpWebview" Language="1033"
+    >
+        <!-- The package needs administrative permission to install - needed for the loopback exception -->
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"/>
+        <Media Id="1" Cabinet="files.cab" EmbedCab="yes" />
+
+        <!-- Define the directory structure of the target folder -->
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="INSTALLDIR" Name="DesktopApp" />
+            </Directory>
+        </Directory>
+
+        <!-- Feature definition includes all files harvested by heat -->
+        <Feature Id="Complete" Level="1">      
+            <ComponentGroupRef Id="ApplicationFiles" /> 
+        </Feature>
+
+        <UI>
+            <!-- Skip License and show installer with path chooser -->
+            <Publish Dialog="WelcomeDlg"
+                Control="Next"
+                Event="NewDialog"
+                Value="InstallDirDlg"
+                Order="2">1</Publish>
+            <Publish Dialog="InstallDirDlg"
+                Control="Back"
+                Event="NewDialog"
+                Value="WelcomeDlg"
+                Order="2">1</Publish>
+            <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+            <UIRef Id="WixUI_InstallDir" />
+            <UIRef Id="WixUI_ErrorProgressText" />
+        </UI>
+
+        <!-- Add loopback exception -->
+        <InstallExecuteSequence>
+            <Custom Action='LoopBackCmd' Before='InstallFinalize'/>
+        </InstallExecuteSequence>
+        <CustomAction Id="LoopBackCmd" Directory="INSTALLDIR" Execute="deferred" Impersonate="no" ExeCommand="cmd.exe /c &quot;CheckNetIsolation.exe LoopbackExempt -a -n=&quot;Microsoft.Win32WebViewHost_cw5n1h2txyewy&quot;&quot;" Return="ignore" />
+    </Product>
+</Wix>
