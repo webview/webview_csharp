@@ -1,10 +1,13 @@
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace SharpWebview.Content
 {
@@ -35,7 +38,13 @@ namespace SharpWebview.Content
         public void ConfigureServices(IServiceCollection services) { }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseFileServer();
+            var workingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            app.UseFileServer(new FileServerOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(workingDirectory, "app")),
+                RequestPath = "",
+                EnableDirectoryBrowsing = true
+            });
         }
     }
 }
