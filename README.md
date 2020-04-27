@@ -9,7 +9,7 @@ This repository contains battery included C# bindings for [zserge/webview](https
 # Webview
 
 [zserge/webview](https://github.com/zserge/webview) is a small C/C++ header only library for a cross platform access of a webview control.
-It uses Edge Chromium, with fallback to the 'old' Edge, on Windows, GTK Webkit on Linux and Cocoa Webkit on maxOS.
+It uses Edge Chromium, with fallback to the 'old' Edge, on Windows, GTK Webkit on Linux and Cocoa Webkit on macOS.
 *sharpWebview* ships precompiled libraries for each system, ready to be used in your next C# project. This repository contains a cmake file to compile webview via *Github Actions* [![WebviewNative](https://github.com/geaz/sharpWebview/workflows/WebviewNative/badge.svg)](https://github.com/geaz/sharpWebview/actions?query=workflow%3AWebviewNative).
 
 You are always able to see which webview version *sharpWebview* uses by looking into the [CMakeLists.txt](https://github.com/geaz/sharpWebview/blob/master/CMakeLists.txt) (GIT_TAG option in the *FetchContent_Declare* command). You can find all compiled libraries and used patches in the [libs](https://github.com/geaz/sharpWebview/tree/master/libs) folder of this repository.
@@ -31,7 +31,6 @@ Always add the *[STAThread]* attribute to the main method. This is necessary to 
 ```
 [STAThread]
 static void Main(string[] args)
-{
 ```
 
 To create a webview use a *using* block. This way you make sure that the native webview gets always disposed correctly!
