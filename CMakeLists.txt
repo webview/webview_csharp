@@ -25,6 +25,7 @@ FetchContent_Declare(
     PATCH_COMMAND 
         COMMAND git apply ${PROJECT_SOURCE_DIR}/libs/000-WindowTitlebarIcon.patch
         COMMAND git apply ${PROJECT_SOURCE_DIR}/libs/001-InitPointVars.patch
+        COMMAND git apply ${PROJECT_SOURCE_DIR}/libs/002-Windows-HideUntilRun.patch
 )
 FetchContent_Populate(webviewNative)
 
