@@ -12,7 +12,7 @@ This repository contains battery included C# bindings for [zserge/webview](https
 It uses Edge Chromium, with fallback to the 'old' Edge, on Windows, GTK Webkit on Linux and Cocoa Webkit on maxOS.
 *sharpWebview* ships precompiled libraries for each system, ready to be used in your next C# project. This repository contains a cmake file to compile webview via *Github Actions* [![WebviewNative](https://github.com/geaz/sharpWebview/workflows/WebviewNative/badge.svg)](https://github.com/geaz/sharpWebview/actions?query=workflow%3AWebviewNative).
 
-You are always able to see which webview version *sharpWebview* uses by looking into the [CMakeLists.txt](https://github.com/geaz/sharpWebview/blob/master/CMakeLists.txt) (GIT_TAG option in the *FetchContent_Declar command). You can find all compiled libraries and used patches in the [libs](https://github.com/geaz/sharpWebview/tree/master/libs) folder of this repository.
+You are always able to see which webview version *sharpWebview* uses by looking into the [CMakeLists.txt](https://github.com/geaz/sharpWebview/blob/master/CMakeLists.txt) (GIT_TAG option in the *FetchContent_Declare* command). You can find all compiled libraries and used patches in the [libs](https://github.com/geaz/sharpWebview/tree/master/libs) folder of this repository.
 
 All patches are also contributed back to [zserge/webview](https://github.com/zserge/webview).
 
@@ -65,7 +65,7 @@ Please have a look into the documented [*Program.cs*](https://github.com/geaz/sh
 
 ## Run a webserver to serve a javascript application
 
-Besides the *UrlContent* and *HtmlContent*, **sharpWebview** also provides a *HostedContent*. This content type creates a webserver on start of the application to which the webview will automatically navigate.
+Besides the *UrlContent* and *HtmlContent*, *sharpWebview* also provides a *HostedContent*. This content type creates a webserver to which the webview will automatically navigate.
 
 To use this content it is necessary to create a *wwwroot* folder in your project. Every file you put into this folder will be served by the *HostedContent*. The [*DesktopApp*](https://github.com/geaz/sharpWebview/tree/master/examples/DesktopApp) project is an example of the usage of this content type.
 Don't forget to set the files in the *wwwroot* folder to *copy always* (see project file for an example).
