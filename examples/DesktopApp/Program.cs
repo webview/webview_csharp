@@ -16,8 +16,10 @@ namespace DesktopApp
             var hostedContent = new HostedContent();
 
             // Wrap the usage of the webview into a using block
-            // Otherwise the native window will not get disposed correctly
-            using (var webview = new Webview(true))
+            // Otherwise the native window will not get disposed correctly.
+            // By setting the second parameter to true, sharpWebview intercepts
+            // all external links and opens them in the system browser.
+            using (var webview = new Webview(true, true))
             {
                 webview
                     // Set the title of the application window

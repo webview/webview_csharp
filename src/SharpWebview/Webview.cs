@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using Newtonsoft.Json;
 using SharpWebview.Content;
 
 namespace SharpWebview
@@ -19,9 +21,16 @@ namespace SharpWebview
         /// Set to true, to activate a debug view, 
         /// if the current webview implementation supports it.
         /// </param>
-        public Webview(bool debug = false)
+        /// <param name="interceptExternalLinks">
+        /// Set to true, top open external links in system browser.
+        /// </param>
+        public Webview(bool debug = false, bool interceptExternalLinks = false)
         {
             _nativeWebview = Bindings.webview_create(debug ? 1 : 0, IntPtr.Zero);
+            if(interceptExternalLinks)
+            {
+                InterceptExternalLinks();
+            }
         }
 
         /// <summary>
@@ -136,6 +145,51 @@ namespace SharpWebview
                 Bindings.webview_destroy(_nativeWebview);
                 _disposed = true;
             }
+        }
+
+        private void InterceptExternalLinks()
+        {
+            // Bind a native method as javascript
+            // This method opens the url parameter in the system browser
+            Bind("openExternalLink", (id, req) =>
+            {
+                dynamic args = JsonConvert.DeserializeObject(req);
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = args[0],
+                    UseShellExecute = true
+                };
+                Process.Start (psi);
+
+                Return(id, RPCResult.Success, "{}");
+            });
+
+            // On Init of the webview we inject some javascript
+            // This javascript intercepts all click events and checks,
+            // if the intercepted click is an external link.
+            // In case on an external link the registered native method is called.
+            InitScript(@"
+                function interceptClickEvent(e) {
+                    var href;
+                    var target = e.target || e.srcElement;
+                    if (target.tagName === 'A') {
+                        href = target.getAttribute('href');
+                        if(href.startsWith('http') 
+                            && !href.startsWith('http://localhost')
+                            && !href.startsWith('http://127.0.0.1')
+                        ) {
+                            openExternalLink(href);
+                            e.preventDefault();
+                        }
+                    }
+                }
+
+                if (document.addEventListener) {
+                    document.addEventListener('click', interceptClickEvent);
+                } else if (document.attachEvent) {
+                    document.attachEvent('onclick', interceptClickEvent);
+                }
+            ");
         }
 
         ~Webview() => Dispose(false);
