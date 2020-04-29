@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using Newtonsoft.Json;
 using SharpWebview.Content;
+using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace SharpWebview
 {
@@ -12,6 +13,8 @@ namespace SharpWebview
     public class Webview : IDisposable
     {
         private bool _disposed = false;
+        private List<CallBackFunction> callbacks = new List<CallBackFunction>();
+
         private readonly IntPtr _nativeWebview;
 
         /// <summary>
@@ -93,7 +96,10 @@ namespace SharpWebview
         /// <returns>The webview object for a fluent api.</returns>
         public Webview Bind(string name, Action<string, string> callback)
         {
-            Bindings.webview_bind(_nativeWebview, name, (id, req, arg) => { callback(id, req); }, IntPtr.Zero);
+            var callbackInstance = new CallBackFunction((id, req, arg) => { callback(id, req); });
+            callbacks.Add(callbackInstance); // Pin the callback for the GC
+
+            Bindings.webview_bind(_nativeWebview, name, callbackInstance, IntPtr.Zero);
             return this;
         }
 
