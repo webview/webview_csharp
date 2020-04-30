@@ -176,17 +176,20 @@ namespace SharpWebview
             // In case on an external link the registered native method is called.
             InitScript(@"
                 function interceptClickEvent(e) {
-                    var href;
+                    var href = '';
                     var target = e.target || e.srcElement;
                     if (target.tagName === 'A') {
                         href = target.getAttribute('href');
-                        if(href.startsWith('http') 
-                            && !href.startsWith('http://localhost')
-                            && !href.startsWith('http://127.0.0.1')
-                        ) {
-                            openExternalLink(href);
-                            e.preventDefault();
-                        }
+                    }
+                    else if(target.tagName === 'IMG') {
+                        href = target.parentElement.getAttribute('href');
+                    }
+                    if(href.startsWith('http') 
+                        && !href.startsWith('http://localhost')
+                        && !href.startsWith('http://127.0.0.1')
+                    ) {
+                        openExternalLink(href);
+                        e.preventDefault();
                     }
                 }
 
