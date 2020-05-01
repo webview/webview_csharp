@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
 
 namespace SharpWebview.Content
 {
@@ -15,11 +16,12 @@ namespace SharpWebview.Content
     {
         private readonly IWebHost _webHost;
 
-        public HostedContent(int port = 0)
+        public HostedContent(int port = 0, bool activateLog = false)
         {
             _webHost = WebHost.CreateDefaultBuilder()
                    .UseStartup<Startup>()
                    .UseKestrel(options => options.Listen(IPAddress.Loopback, port))
+                   .ConfigureLogging((logger) => { if(!activateLog) logger.ClearProviders(); })
                    .Build();
             _webHost.Start();
         }

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Add
 - Link interception for image links
+- Option activate/deactivate logging of the host
 
 ## [0.5.4] - 2020-04-29
 ### Add
