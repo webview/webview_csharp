@@ -23,27 +23,23 @@ endif()
 include(FetchContent)
 FetchContent_Declare(
     webviewNative
-    GIT_REPOSITORY https://github.com/zserge/webview.git
-    GIT_TAG 50e4bcc420abdc7be96a54b7c79934a000b76901
-    PATCH_COMMAND 
-        COMMAND git apply ${PROJECT_SOURCE_DIR}/libs/000-WindowTitlebarIcon.patch
-        COMMAND git apply ${PROJECT_SOURCE_DIR}/libs/001-InitPointVars.patch
-        COMMAND git apply ${PROJECT_SOURCE_DIR}/libs/002-Windows-HideUntilRun.patch
+    GIT_REPOSITORY https://github.com/geaz/webview
+    GIT_TAG 313eae7e61519baa1799509ca98e187bf1f28dbe
 )
 FetchContent_Populate(webviewNative)
 
 include_directories(
     "${webviewnative_SOURCE_DIR}"
-    "${webviewnative_SOURCE_DIR}/script/Microsoft.Web.WebView2.0.8.355/build/native/include"
+    "${webviewnative_SOURCE_DIR}/script/microsoft.web.webview2.0.9.488/build/native/include"
 )
-link_directories("${webviewnative_SOURCE_DIR}/script/Microsoft.Web.WebView2.0.8.355/build/native/x64")
+link_directories("${webviewnative_SOURCE_DIR}/script/microsoft.web.webview2.0.9.488/build/native/x64")
 
 add_library(webview SHARED "${webviewnative_SOURCE_DIR}/webview.cc")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     target_compile_definitions(webview PRIVATE "WEBVIEW_API=__declspec(dllexport)")
     target_link_libraries(webview WebView2Loader.dll.lib)
-    configure_file(${webviewnative_SOURCE_DIR}/script/Microsoft.Web.WebView2.0.8.355/build/x64/WebView2Loader.dll WebView2Loader.dll COPYONLY)
+    configure_file(${webviewnative_SOURCE_DIR}/script/microsoft.web.webview2.0.9.488/build/x64/WebView2Loader.dll WebView2Loader.dll COPYONLY)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     target_link_libraries(webview PkgConfig::gtk3 PkgConfig::webkit2)
 endif()

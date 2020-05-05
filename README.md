@@ -16,6 +16,8 @@ You are always able to see which webview version *sharpWebview* uses by looking 
 
 All patches are also contributed back to [zserge/webview](https://github.com/zserge/webview).
 
+*REMARK:* The nuget uses this [fork](https://github.com/geaz/webview) at the moment, because the work on upstream is stalled at the moment. Because of the many patches it was not possible to maintain it without a fork.
+
 # Get started
 
 ## A basic example
@@ -33,7 +35,7 @@ Always add the *[STAThread]* attribute to the main method. This is necessary to 
 static void Main(string[] args)
 ```
 
-To create a webview use a *using* block. This way you make sure that the native webview gets always disposed correctly!
+To create a webview use a *using* block. This way you make sure that the native webview gets disposed correctly!
 
 ```
 using SharpWebview;
