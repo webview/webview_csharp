@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2020-05-17
+### Add
+- Add binding for webview_dispatch
+- New webview version
+
 ## [0.5.5] - 2020-05-05
 ### Add
 - Link interception for image links

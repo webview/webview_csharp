@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using SharpWebview.Content;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace SharpWebview
 {
@@ -96,7 +97,7 @@ namespace SharpWebview
         /// <returns>The webview object for a fluent api.</returns>
         public Webview Bind(string name, Action<string, string> callback)
         {
-            var callbackInstance = new CallBackFunction((id, req, arg) => { callback(id, req); });
+            var callbackInstance = new CallBackFunction((id, req, _) => callback(id, req));
             callbacks.Add(callbackInstance); // Pin the callback for the GC
 
             Bindings.webview_bind(_nativeWebview, name, callbackInstance, IntPtr.Zero);
@@ -136,6 +137,16 @@ namespace SharpWebview
         }
 
         /// <summary>
+        /// Posts a function to be executed on the main thread of the webview.
+        /// </summary>
+        /// <param name="dispatchFunc">The function to call on the main thread</param>
+        public void Dispatch(Action dispatchFunc)
+        {
+            var dispatchFuncInstance = new DispatchFunction((_, __) => dispatchFunc());
+            Bindings.webview_dispatch(_nativeWebview, dispatchFuncInstance, IntPtr.Zero);
+        }
+
+        /// <summary>
         /// Disposes the current webview.
         /// </summary>
         public void Dispose()
@@ -148,6 +159,7 @@ namespace SharpWebview
         {
             if (!_disposed)
             {
+                Bindings.webview_terminate(_nativeWebview);
                 Bindings.webview_destroy(_nativeWebview);
                 _disposed = true;
             }

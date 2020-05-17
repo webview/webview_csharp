@@ -30,6 +30,11 @@ namespace SharpWebview
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    internal delegate void DispatchFunction(
+        IntPtr webview,
+        IntPtr args);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void CallBackFunction(
         [MarshalAs(UnmanagedType.LPStr)] string id,
         [MarshalAs(UnmanagedType.LPStr)] string req,
@@ -156,6 +161,19 @@ namespace SharpWebview
         internal extern static void webview_eval(IntPtr webview, [MarshalAs(UnmanagedType.LPStr)] string js);
         
         /// <summary>
+        /// Posts a function to be executed on the main thread. You normally do not need
+        /// to call this function, unless you want to tweak the native window.
+        /// 
+        /// Binding for:
+        /// WEBVIEW_API void webview_dispatch(webview_t w, void (*fn)(webview_t w, void *arg), void *arg);
+        /// </summary>
+        /// <param name="webview">The webview to dispatch the function to</param>
+        /// <param name="dispatchFunction">The function to execute on the webview thread</param>
+        /// <param name="args">Paramters to pass to the dispatched function</param>
+        [DllImport(DllFile, CallingConvention = CallingConvention.Cdecl)]
+        internal extern static void webview_dispatch(IntPtr webview, DispatchFunction dispatchFunction, IntPtr args);
+
+        /// <summary>
         /// Binds a native C callback so that it will appear under the given name as a
         /// global JavaScript function. Internally it uses webview_init(). Callback
         /// receives a request string and a user-provided argument pointer. Request
@@ -196,10 +214,6 @@ namespace SharpWebview
 
         /*
         Not mapped:
-            // Posts a function to be executed on the main thread. You normally do not need
-            // to call this function, unless you want to tweak the native window.
-            WEBVIEW_API void
-            webview_dispatch(webview_t w, void (*fn)(webview_t w, void *arg), void *arg);
 
             // Returns a native window handle pointer. When using GTK backend the pointer
             // is GtkWindow pointer, when using Cocoa backend the pointer is NSWindow
