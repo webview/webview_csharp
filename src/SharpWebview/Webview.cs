@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Newtonsoft.Json;
 using SharpWebview.Content;
 using System.Diagnostics;
@@ -176,6 +176,7 @@ namespace SharpWebview
             {
                 Bindings.webview_terminate(_nativeWebview);
                 Bindings.webview_destroy(_nativeWebview);
+                callbacks.Clear();
 
                 lock (dispatchFunctions)
                 {
