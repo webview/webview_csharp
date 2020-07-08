@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 using SharpWebview.Content;
 using System.Diagnostics;
@@ -15,6 +15,7 @@ namespace SharpWebview
     {
         private bool _disposed = false;
         private List<CallBackFunction> callbacks = new List<CallBackFunction>();
+        private List<DispatchFunction> dispatchFunctions = new List<DispatchFunction>();
 
         private readonly IntPtr _nativeWebview;
 
@@ -142,7 +143,21 @@ namespace SharpWebview
         /// <param name="dispatchFunc">The function to call on the main thread</param>
         public void Dispatch(Action dispatchFunc)
         {
-            var dispatchFuncInstance = new DispatchFunction((_, __) => dispatchFunc());
+            DispatchFunction dispatchFuncInstance = null!;
+            dispatchFuncInstance = new DispatchFunction((_, __) =>
+            {
+                lock (dispatchFunctions)
+                {
+                    dispatchFunctions.Remove(dispatchFuncInstance);
+                }
+                dispatchFunc();
+            });
+
+            lock (dispatchFunctions)
+            {
+                dispatchFunctions.Add(dispatchFuncInstance); // Pin the callback for the GC
+            }
+
             Bindings.webview_dispatch(_nativeWebview, dispatchFuncInstance, IntPtr.Zero);
         }
 
@@ -161,6 +176,12 @@ namespace SharpWebview
             {
                 Bindings.webview_terminate(_nativeWebview);
                 Bindings.webview_destroy(_nativeWebview);
+
+                lock (dispatchFunctions)
+                {
+                    dispatchFunctions.Clear();
+                }
+
                 _disposed = true;
             }
         }
