@@ -10,7 +10,7 @@
     <PackageId>SharpWebview</PackageId>
     <PackageVersion>0.6.1</PackageVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/geaz/sharpWebview</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/webview/webview_csharp</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
