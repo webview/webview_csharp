@@ -21,6 +21,15 @@ All patches are also contributed back to [zserge/webview](https://github.com/zse
 
 # Get started
 
+## Linux Prerequisites
+
+Please install the developer packages of webkit2gtk and libgtk on your machine. 
+
+With a distribution using apt run:  
+```
+sudo apt install -y libwebkit2gtk-4.0-dev libgtk-3-dev
+```
+
 ## A basic example
 
 Create a new .net core console application and add the **SharpWebview** nuget. Use the dotnet command line or the package management in Visual Studio, if you use it.
