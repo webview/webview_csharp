@@ -40,7 +40,7 @@ namespace DesktopApp
                     .Navigate(hostedContent)
                     // Run the webview loop
                     .Run();
-            }                
+            }
         }
     }
 }
