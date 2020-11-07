@@ -14,6 +14,7 @@ namespace SharpWebview
     public class Webview : IDisposable
     {
         private bool _disposed = false;
+        private bool? _loopbackEnabled = null;
         private List<CallBackFunction> callbacks = new List<CallBackFunction>();
         private List<DispatchFunction> dispatchFunctions = new List<DispatchFunction>();
 
@@ -59,7 +60,7 @@ namespace SharpWebview
         public Webview SetSize(int width, int height, WebviewHint hint)
         {
             Bindings.webview_set_size(_nativeWebview, width, height, hint);
-            return this;            
+            return this;
         }
 
         /// <summary>
@@ -86,7 +87,19 @@ namespace SharpWebview
         /// <returns>The webview object for a fluent api.</returns>
         public Webview Navigate(IWebviewContent webviewContent)
         {
-            Bindings.webview_navigate(_nativeWebview, webviewContent.ToWebviewUrl());
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            // Only check the loopback exceptions once, if the url routes to the localhsot
+            // We want to avoid the check on each navigation!
+            // If the current url is not routing to the localhost, the check will return 'null'
+            if(isWindows && _loopbackEnabled == null) _loopbackEnabled = CheckLoopbackException(webviewContent.ToWebviewUrl());
+            if(isWindows && _loopbackEnabled != null && !_loopbackEnabled.Value)
+            {
+                Bindings.webview_navigate(_nativeWebview, new HtmlContent("Loopback not enabled!").ToWebviewUrl());
+            }
+            else
+            {
+                Bindings.webview_navigate(_nativeWebview, webviewContent.ToWebviewUrl());
+            }
             return this;
         }
 
@@ -233,6 +246,18 @@ namespace SharpWebview
                     document.attachEvent('onclick', interceptClickEvent);
                 }
             ");
+        }
+
+        private bool? CheckLoopbackException(string url)
+        {
+            // https://docs.microsoft.com/de-de/windows/win32/sysinfo/operating-system-version
+            if(Environment.OSVersion.Version.Major < 6 || (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor < 2))
+                return true;
+            else if(url.Contains("localhost") && !url.Contains("127.0.0.1"))
+                return null;
+
+            var loopBack = new Loopback();
+            return loopBack.IsWebViewLoopbackEnabled();
         }
 
         ~Webview() => Dispose(false);
