@@ -10,7 +10,7 @@ namespace SharpWebview
     /// </summary>
     public class Loopback
     {
-        private const string WebViewAppContainerName = "Microsoft.Win32WebViewHost_cw5n1h2txyewy";
+        private const string WebViewAppContainerName = "microsoft.win32webviewhost_cw5n1h2txyewy";
 
         /// <summary>
         /// This method checks, if the loopback exception is present for the webview on windows.
@@ -29,7 +29,7 @@ namespace SharpWebview
         private string GetWebViewAppContainerSid()
         {
             var webviewAppContainer = GetAllAppContainers()
-                .SingleOrDefault(a => a.appContainerName == WebViewAppContainerName);
+                .SingleOrDefault(a => a.appContainerName.ToLower() == WebViewAppContainerName);
             ConvertSidToStringSid(webviewAppContainer.appContainerSid, out var webViewSid);
             return webViewSid;
         }
@@ -87,8 +87,8 @@ namespace SharpWebview
         #region DllImports
         internal enum NETISO_FLAG
         {
-              NETISO_FLAG_FORCE_COMPUTE_BINARIES  =  0x1,
-              NETISO_FLAG_MAX                     =  0x2
+            NETISO_FLAG_FORCE_COMPUTE_BINARIES  =  0x1,
+            NETISO_FLAG_MAX                     =  0x2
         }
 
         [StructLayout(LayoutKind.Sequential)]
