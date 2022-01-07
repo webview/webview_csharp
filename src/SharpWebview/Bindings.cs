@@ -36,8 +36,8 @@ namespace SharpWebview
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     internal delegate void CallBackFunction(
-        [MarshalAs(UnmanagedType.LPStr)] string id,
-        [MarshalAs(UnmanagedType.LPStr)] string req,
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string id,
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string req,
         IntPtr arg);
 
     internal static class Bindings
@@ -115,7 +115,7 @@ namespace SharpWebview
         /// <param name="webview">The webview to update.</param>
         /// <param name="title">New webview title.</param>
         [DllImport(DllFile, CallingConvention = CallingConvention.Cdecl)]
-        internal extern static void webview_set_title(IntPtr webview, [MarshalAs(UnmanagedType.LPStr)] string title);
+        internal extern static void webview_set_title(IntPtr webview, [MarshalAs(UnmanagedType.LPUTF8Str)] string title);
 
         /// <summary>
         /// <para>Updates native window size.</para>
@@ -145,7 +145,7 @@ namespace SharpWebview
         /// <param name="webview">The webview to update</param>
         /// <param name="url">The url to navigate to</param>
         [DllImport(DllFile, CallingConvention = CallingConvention.Cdecl)]
-        internal extern static void webview_navigate(IntPtr webview, [MarshalAs(UnmanagedType.LPStr)] string url);
+        internal extern static void webview_navigate(IntPtr webview, [MarshalAs(UnmanagedType.LPUTF8Str)] string url);
 
         /// <summary>
         /// <para>
@@ -161,7 +161,7 @@ namespace SharpWebview
         /// <param name="webview">The webview to execute the javascript.</param>
         /// <param name="js">The javascript to execute.</param>
         [DllImport(DllFile, CallingConvention = CallingConvention.Cdecl)]
-        internal extern static void webview_init(IntPtr webview, [MarshalAs(UnmanagedType.LPStr)] string js);
+        internal extern static void webview_init(IntPtr webview, [MarshalAs(UnmanagedType.LPUTF8Str)] string js);
 
         /// <summary>
         /// <para>
@@ -177,7 +177,7 @@ namespace SharpWebview
         /// <param name="webview">The webview to execute the javascript in.</param>
         /// <param name="js">The javascript to evaluate.</param>
         [DllImport(DllFile, CallingConvention = CallingConvention.Cdecl)]
-        internal extern static void webview_eval(IntPtr webview, [MarshalAs(UnmanagedType.LPStr)] string js);
+        internal extern static void webview_eval(IntPtr webview, [MarshalAs(UnmanagedType.LPUTF8Str)] string js);
 
         /// <summary>
         /// <para>
@@ -216,7 +216,7 @@ namespace SharpWebview
         [DllImport(DllFile, CallingConvention = CallingConvention.Cdecl)]
         internal extern static void webview_bind(
             IntPtr webview,
-            [MarshalAs(UnmanagedType.LPStr)] string name,
+            [MarshalAs(UnmanagedType.LPUTF8Str)] string name,
             CallBackFunction callback,
             IntPtr arg);
 
@@ -238,9 +238,9 @@ namespace SharpWebview
         /// <param name="resultJson">The json data to return to the webview.</param>
         [DllImport(DllFile, CallingConvention = CallingConvention.Cdecl)]
         internal extern static void webview_return(IntPtr webview,
-            [MarshalAs(UnmanagedType.LPStr)] string id,
+            [MarshalAs(UnmanagedType.LPUTF8Str)] string id,
             RPCResult result,
-            [MarshalAs(UnmanagedType.LPStr)] string resultJson);
+            [MarshalAs(UnmanagedType.LPUTF8Str)] string resultJson);
 
         /*
         Not mapped:
