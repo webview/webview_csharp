@@ -1,23 +1,21 @@
-[![ReleaseBuild](https://github.com/geaz/sharpWebview/workflows/ReleaseBuild/badge.svg)](https://github.com/geaz/sharpWebview/actions?query=workflow%3AReleaseBuild)
-[![WebviewNative](https://github.com/geaz/sharpWebview/workflows/WebviewNative/badge.svg)](https://github.com/geaz/sharpWebview/actions?query=workflow%3AWebviewNative)
+[![ReleaseBuild](https://github.com/webview/sharpWebview/workflows/ReleaseBuild/badge.svg)](https://github.com/webview/sharpWebview/actions?query=workflow%3AReleaseBuild)
+[![WebviewNative](https://github.com/webview/sharpWebview/workflows/WebviewNative/badge.svg)](https://github.com/webview/sharpWebview/actions?query=workflow%3AWebviewNative)
 [![Nuget](https://img.shields.io/nuget/v/SharpWebview?color=green)](https://www.nuget.org/packages/SharpWebview/)
 [![Webview Org Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/grzBQBP)
 
 # sharpWebview
 
-This repository contains battery included C# bindings for [zserge/webview](https://github.com/zserge/webview). **It only supports x64 systems.**
+This repository contains battery included C# bindings for [webview](https://github.com/webview/webview). **It only supports x64 systems.**
 
 # Webview
 
-[zserge/webview](https://github.com/zserge/webview) is a small C/C++ header only library for a cross platform access of a webview control.
+[webview](https://github.com/webview/webview) is a small C/C++ header only library for a cross platform access of a webview control.
 It uses Edge Chromium, with fallback to the 'old' Edge, on Windows, GTK Webkit on Linux and Cocoa Webkit on macOS.
-*sharpWebview* ships precompiled libraries for each system, ready to be used in your next C# project. This repository contains a cmake file to compile webview via *Github Actions* [![WebviewNative](https://github.com/geaz/sharpWebview/workflows/WebviewNative/badge.svg)](https://github.com/geaz/sharpWebview/actions?query=workflow%3AWebviewNative).
+*sharpWebview* ships precompiled libraries for each system, ready to be used in your next C# project. This repository contains a cmake file to compile webview via *Github Actions* [![WebviewNative](https://github.com/webview/sharpWebview/workflows/WebviewNative/badge.svg)](https://github.com/webview/sharpWebview/actions?query=workflow%3AWebviewNative).
 
-You are always able to see which webview version *sharpWebview* uses by looking into the [CMakeLists.txt](https://github.com/geaz/sharpWebview/blob/master/CMakeLists.txt) (GIT_TAG option in the *FetchContent_Declare* command). You can find all compiled libraries and used patches in the [libs](https://github.com/geaz/sharpWebview/tree/master/libs) folder of this repository.
+You are always able to see which webview version *sharpWebview* uses by looking into the [CMakeLists.txt](https://github.com/webview/sharpWebview/blob/master/CMakeLists.txt) (GIT_TAG option in the *FetchContent_Declare* command). You can find all compiled libraries and used patches in the [libs](https://github.com/webview/sharpWebview/tree/master/libs) folder of this repository.
 
-All patches are also contributed back to [zserge/webview](https://github.com/zserge/webview).
-
-*REMARK:* The nuget uses this [fork](https://github.com/geaz/webview) at the moment, because the work on upstream is stalled at the moment. Because of the many patches it was not possible to maintain it without a fork.
+All patches are also contributed back to [webview](https://github.com/webview/webview).
 
 # Get started
 
@@ -71,14 +69,14 @@ using(var webview = new Webview())
 }
 ```
 
-The [examples](https://github.com/geaz/sharpWebview/tree/master/examples) folder contains two basic projects. The [*Minimal*](https://github.com/geaz/sharpWebview/tree/master/examples/Minimal) projects shows you a basic example on how to create a cross platform webview and how to open a URL in it.
-Please have a look into the documented [*Program.cs*](https://github.com/geaz/sharpWebview/blob/master/examples/Minimal/Program.cs). You are also able to use the *HtmlContent* to provide some HTML which the webview will render.
+The [examples](https://github.com/webview/sharpWebview/tree/master/examples) folder contains two basic projects. The [*Minimal*](https://github.com/webview/sharpWebview/tree/master/examples/Minimal) projects shows you a basic example on how to create a cross platform webview and how to open a URL in it.
+Please have a look into the documented [*Program.cs*](https://github.com/webview/sharpWebview/blob/master/examples/Minimal/Program.cs). You are also able to use the *HtmlContent* to provide some HTML which the webview will render.
 
 ## Run a webserver to serve a javascript application
 
 Besides the *UrlContent* and *HtmlContent*, *sharpWebview* also provides a *HostedContent*. This content type creates a webserver to which the webview will automatically navigate.
 
-To use this content it is necessary to create a *app* folder in your project. Every file you put into this folder will be served by the *HostedContent*. The [*DesktopApp*](https://github.com/geaz/sharpWebview/tree/master/examples/DesktopApp) project is an example of the usage of this content type.
+To use this content it is necessary to create a *app* folder in your project. Every file you put into this folder will be served by the *HostedContent*. The [*DesktopApp*](https://github.com/webview/sharpWebview/tree/master/examples/DesktopApp) project is an example of the usage of this content type.
 Don't forget to set the files in the *app* folder to *copy always* (see project file for an example).
 
 ### HostedContent on Windows systems
@@ -94,7 +92,7 @@ This adds the Edge Webview Host to the exception list of this limitation. Your b
 # Application Distribution
 ## Windows
  
-The [*DesktopApp*](https://github.com/geaz/sharpWebview/tree/master/examples/DesktopApp) example contains a simple script to create a MSI installer. You are able to take the *wix.bat* and *DesktopApp.wix* files as a starting point for your application. To use the *wix.bat* you need to install the WIX Toolset.
+The [*DesktopApp*](https://github.com/webview/sharpWebview/tree/master/examples/DesktopApp) example contains a simple script to create a MSI installer. You are able to take the *wix.bat* and *DesktopApp.wix* files as a starting point for your application. To use the *wix.bat* you need to install the WIX Toolset.
 
 I highly recommend to use [scoop](https://scoop.sh/) to install it. Scoop is a command line installer for easy installation of many different applications. Just run 
 
@@ -102,4 +100,4 @@ I highly recommend to use [scoop](https://scoop.sh/) to install it. Scoop is a c
 scoop install wixtoolset
 ```
 
-to install WIX. After this you should be able to execute the *wix.bat* to create a basic installer for the example [*DesktopApp*](https://github.com/geaz/sharpWebview/tree/master/examples/DesktopApp).
+to install WIX. After this you should be able to execute the *wix.bat* to create a basic installer for the example [*DesktopApp*](https://github.com/webview/sharpWebview/tree/master/examples/DesktopApp).
