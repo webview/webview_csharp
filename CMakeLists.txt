@@ -23,23 +23,23 @@ endif()
 include(FetchContent)
 FetchContent_Declare(
     webviewNative
-    GIT_REPOSITORY https://github.com/geaz/webview
-    GIT_TAG 13a11cfee9be94608ee3add8df05d4f740a320d9
+    GIT_REPOSITORY https://github.com/webview/webview
+    GIT_TAG 5d72732c9f5c94241d9a983b512e5fc5698bd1e0
 )
 FetchContent_Populate(webviewNative)
 
 include_directories(
     "${webviewnative_SOURCE_DIR}"
-    "${webviewnative_SOURCE_DIR}/script/microsoft.web.webview2.0.9.488/build/native/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/libs/include"
 )
-link_directories("${webviewnative_SOURCE_DIR}/script/microsoft.web.webview2.0.9.488/build/native/x64")
+link_directories("${CMAKE_CURRENT_SOURCE_DIR}/libs")
 
 add_library(webview SHARED "${webviewnative_SOURCE_DIR}/webview.cc")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     target_compile_definitions(webview PRIVATE "WEBVIEW_API=__declspec(dllexport)")
     target_link_libraries(webview WebView2Loader.dll.lib)
-    configure_file(${webviewnative_SOURCE_DIR}/script/microsoft.web.webview2.0.9.488/build/x64/WebView2Loader.dll WebView2Loader.dll COPYONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libs/WebView2Loader.dll WebView2Loader.dll COPYONLY)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     target_link_libraries(webview PkgConfig::gtk3 PkgConfig::webkit2)
 endif()

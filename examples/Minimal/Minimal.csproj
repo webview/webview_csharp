@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharpWebview" Version="0.6.1" />
+    <PackageReference Include="SharpWebview" Version="0.7.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="icon.ico">
