@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2022-04-13
+### Fixed
+- Update to latest webview version
+
 ## [0.6.1] - 2020-07-11
 ### Fixed
 - Dispatch delegates pinned until execution
