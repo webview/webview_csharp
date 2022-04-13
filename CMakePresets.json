@@ -1,0 +1,25 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+      "major": 3,
+      "minor": 21,
+      "patch": 0
+    },
+    "configurePresets": [
+      {
+        "name": "ninja",
+        "displayName": "Default Configure Settings",
+        "description": "Sets build and install directories",
+        "binaryDir": "${sourceDir}/build",
+        "generator": "Ninja"
+      }
+    ],
+    "buildPresets": [
+      {
+        "name": "ninja",
+        "configurePreset": "ninja",
+        "displayName": "Build with Ninja",
+        "description": "Build with Ninja"
+      }
+    ]
+  }
