@@ -38,14 +38,14 @@ dotnet add package SharpWebview
 
 Always add the *[STAThread]* attribute to the main method. This is necessary to work on windows at least.
 
-```
+```csharp
 [STAThread]
 static void Main(string[] args)
 ```
 
 To create a webview use a *using* block. This way you make sure that the native webview gets disposed correctly!
 
-```
+```csharp
 using SharpWebview;
 
 [...]
@@ -57,7 +57,7 @@ using(var webview = new Webview())
 
 To open a basic webview which is pointing to a wikipedia article use the following code:
 
-```
+```csharp
 using(var webview = new Webview())
 {
     webview
