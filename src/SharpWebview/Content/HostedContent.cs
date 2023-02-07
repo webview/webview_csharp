@@ -48,10 +48,9 @@ namespace SharpWebview.Content
         public void ConfigureServices(IServiceCollection services) { }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            var workingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var fileServerOptions = new FileServerOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(workingDirectory, "app")),
+                FileProvider = new PhysicalFileProvider(Path.Combine(System.Environment.CurrentDirectory, "app")),
                 RequestPath = "",
                 EnableDirectoryBrowsing = true,
             };
