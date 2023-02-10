@@ -18,20 +18,22 @@ namespace SharpWebview
         /// <returns>True, if the exception is present.</returns>
         public bool IsWebViewLoopbackEnabled()
         {
-            var webViewSid = GetWebViewAppContainerSid();
+            var webViewSids = GetWebViewAppContainerSids();
             return GetAllAppContainerConfigs().Any(c =>
             {
                 ConvertSidToStringSid(c.Sid, out var currentSid);
-                return currentSid == webViewSid;
+                return webViewSids.Any(webViewSid => currentSid == webViewSid);
             });
         }
 
-        private string GetWebViewAppContainerSid()
+        private IEnumerable<string> GetWebViewAppContainerSids()
         {
-            var webviewAppContainer = GetAllAppContainers()
-                .SingleOrDefault(a => a.appContainerName.ToLower() == WebViewAppContainerName);
-            ConvertSidToStringSid(webviewAppContainer.appContainerSid, out var webViewSid);
-            return webViewSid;
+            return GetAllAppContainers()
+                .Where(a => a.appContainerName.ToLower() == WebViewAppContainerName)
+                .Select(a => {
+                    ConvertSidToStringSid(a.appContainerSid, out var webViewSid);
+                    return webViewSid;
+                });
         }
 
         private List<FirewallAppContainer> GetAllAppContainers()
