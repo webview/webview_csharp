@@ -34,7 +34,7 @@ namespace DesktopApp
                         // Req contains the parameters of the javascript call
                         Console.WriteLine(req);
                         // And returns a successful promise result to the javascript function, which executed the 'evalTest'
-                        webview.Return(id, RPCResult.Success, "{ result: 42 }");
+                        webview.Return(id, RPCResult.Success, "{ \"result\": 42 }");
                     })
                     // Navigate to this url on start
                     .Navigate(hostedContent)
