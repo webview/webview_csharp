@@ -220,7 +220,7 @@ namespace SharpWebview
             // On Init of the webview we inject some javascript
             // This javascript intercepts all click events and checks,
             // if the intercepted click is an external link.
-            // In case on an external link the registered native method is called.
+            // In case of an external link the registered native method is called.
             InitScript(@"
                 function interceptClickEvent(e) {
                     var href = '';

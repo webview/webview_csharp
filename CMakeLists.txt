@@ -4,8 +4,8 @@ project(webview VERSION 0.10.0)
 set(CMAKE_CXX_STANDARD 17)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT -DWEBVIEW_STATIC")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd -DWEBVIEW_STATIC")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(
@@ -16,15 +16,16 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         webkit2 REQUIRED webkit2gtk-4.0
         IMPORTED_TARGET
       )
+    set(CMAKE_CXX_FLAGS "-DWEBVIEW_STATIC")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -framework WebKit")
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -framework WebKit -DWEBVIEW_STATIC")
 endif()
 
 include(FetchContent)
 FetchContent_Declare(
     webviewNative
     GIT_REPOSITORY https://github.com/webview/webview
-    GIT_TAG 5d72732c9f5c94241d9a983b512e5fc5698bd1e0
+    GIT_TAG 53ea174ce79ca2f52e28dd51d49052aebce3f4c5
 )
 FetchContent_Populate(webviewNative)
 

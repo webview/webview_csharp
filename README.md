@@ -15,8 +15,6 @@ It uses Edge Chromium, with fallback to the 'old' Edge, on Windows, GTK Webkit o
 
 You are always able to see which webview version *sharpWebview* uses by looking into the [CMakeLists.txt](https://github.com/webview/sharpWebview/blob/master/CMakeLists.txt) (GIT_TAG option in the *FetchContent_Declare* command). You can find all compiled libraries and used patches in the [libs](https://github.com/webview/sharpWebview/tree/master/libs) folder of this repository.
 
-All patches are also contributed back to [webview](https://github.com/webview/webview).
-
 # Get started
 
 ## Linux Prerequisites
@@ -26,6 +24,11 @@ Please install the developer packages of webkit2gtk and libgtk on your machine.
 With a distribution using apt run:  
 ```
 sudo apt install -y libwebkit2gtk-4.0-dev libgtk-3-dev
+```
+
+or DNF
+```
+sudo dnf install webkit2gtk4,0-devel.x86_64 gtk3-devel.x84_64
 ```
 
 ## A basic example
