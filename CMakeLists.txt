@@ -4,8 +4,8 @@ project(webview VERSION 0.10.0)
 set(CMAKE_CXX_STANDARD 17)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT -DWEBVIEW_STATIC")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd -DWEBVIEW_STATIC")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(
@@ -16,8 +16,9 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         webkit2 REQUIRED webkit2gtk-4.0
         IMPORTED_TARGET
       )
+    set(CMAKE_CXX_FLAGS "-DWEBVIEW_STATIC")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -framework WebKit")
+    set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -framework WebKit -DWEBVIEW_STATIC")
 endif()
 
 include(FetchContent)

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SharpWebview" Version="0.7.0" />
+    <PackageReference Include="SharpWebview" Version="0.8.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="icon.ico">
