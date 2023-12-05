@@ -1,9 +1,9 @@
 ﻿using System;
-using Newtonsoft.Json;
 using SharpWebview.Content;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 
 namespace SharpWebview
 {
@@ -206,7 +206,7 @@ namespace SharpWebview
             // This method opens the url parameter in the system browser
             Bind("openExternalLink", (id, req) =>
             {
-                dynamic args = JsonConvert.DeserializeObject(req);
+                dynamic args = JsonSerializer.Deserialize<dynamic>(req);
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
                     FileName = args[0],
