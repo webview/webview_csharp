@@ -4,6 +4,8 @@ using SharpWebview.Content;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Net;
+using System.Linq;
 
 namespace SharpWebview
 {
@@ -13,8 +15,16 @@ namespace SharpWebview
     /// </summary>
     public class Webview : IDisposable
     {
+        // https://docs.microsoft.com/de-de/windows/win32/sysinfo/operating-system-version
+        internal static Lazy<bool> IsLoopbackOS { get; } = new Lazy<bool>(() =>
+            RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            && Environment.OSVersion.Version is { Major: < 6 } or { Major: 6, Minor: < 2 });
+        internal static Lazy<bool> IsWebViewLoopbackEnabled { get; } =
+            new Lazy<bool>(() => new Loopback().IsWebViewLoopbackEnabled());
+
         private bool _disposed = false;
         private bool? _loopbackEnabled = null;
+        private string _lastHostName = string.Empty;
         private List<CallBackFunction> callbacks = new List<CallBackFunction>();
         private List<DispatchFunction> dispatchFunctions = new List<DispatchFunction>();
 
@@ -87,12 +97,7 @@ namespace SharpWebview
         /// <returns>The webview object for a fluent api.</returns>
         public Webview Navigate(IWebviewContent webviewContent)
         {
-            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-            // Only check the loopback exceptions once, if the url routes to the localhsot
-            // We want to avoid the check on each navigation!
-            // If the current url is not routing to the localhost, the check will return 'null'
-            if(isWindows && _loopbackEnabled == null) _loopbackEnabled = CheckLoopbackException(webviewContent.ToWebviewUrl());
-            if(isWindows && _loopbackEnabled != null && !_loopbackEnabled.Value)
+            if(CheckLoopbackException(webviewContent.ToWebviewUrl()) is false)
             {
                 Bindings.webview_navigate(_nativeWebview, new HtmlContent("Loopback not enabled!").ToWebviewUrl());
             }
@@ -248,16 +253,33 @@ namespace SharpWebview
             ");
         }
 
+        /// <summary>
+        /// Only check the loopback exceptions once, if the url routes to the localhsot<br/>
+        /// We want to avoid the check on each navigation!<br/>
+        /// If the current url is not routing to the localhost, the check will return <see langword="null"/>
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns>
+        /// - <see langword="true"/> when it's not Windows NT 6.2 or greater, or if Loopback is enabled.<br/>
+        /// - <see langword="null"/> when the address is not a loopback address.<br/>
+        /// - <see langword="false"/> when it's a loopback address but loopback is not enabled.<br/>
+        /// </returns>
         private bool? CheckLoopbackException(string url)
         {
-            // https://docs.microsoft.com/de-de/windows/win32/sysinfo/operating-system-version
-            if(Environment.OSVersion.Version.Major < 6 || (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor < 2))
+            if(!IsLoopbackOS.Value)
                 return true;
-            else if(url.Contains("localhost") && !url.Contains("127.0.0.1"))
-                return null;
 
-            var loopBack = new Loopback();
-            return loopBack.IsWebViewLoopbackEnabled();
+            // TODO: Webview2 does not require loopback to be enabled.
+
+            string host = new Uri(url).DnsSafeHost;
+            if(_lastHostName.Equals(host, StringComparison.OrdinalIgnoreCase))
+                return _loopbackEnabled;
+
+            _lastHostName = host;
+            if(!Dns.GetHostAddresses(host).Any(IPAddress.IsLoopback))
+                return _loopbackEnabled = null;
+
+            return _loopbackEnabled = IsWebViewLoopbackEnabled.Value;
         }
 
         ~Webview() => Dispose(false);
