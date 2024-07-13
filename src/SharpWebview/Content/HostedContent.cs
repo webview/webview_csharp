@@ -11,11 +11,11 @@ using System.Net;
 
 namespace SharpWebview.Content
 {
-    public sealed class HostedContent : IWebviewContent
+    public class HostedContent : IWebviewContent
     {
         private readonly WebApplication _webApp;
 
-        public HostedContent(int port = 0, bool activateLog = false, IDictionary<string, string> additionalMimeTypes = null)
+        protected HostedContent(IFileProvider fileProvider, int port = 0, bool activateLog = false, IDictionary<string, string> additionalMimeTypes = null)
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder();
             builder.WebHost.UseKestrel(options => options.Listen(IPAddress.Loopback, port));
@@ -29,7 +29,7 @@ namespace SharpWebview.Content
 
             FileServerOptions fileServerOptions = new FileServerOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(System.Environment.CurrentDirectory, "app")),
+                FileProvider = fileProvider,
                 RequestPath = "",
                 EnableDirectoryBrowsing = true,
             };
@@ -48,6 +48,16 @@ namespace SharpWebview.Content
 
             _webApp.UseFileServer(fileServerOptions);
             _webApp.Start();
+        }
+
+
+        public HostedContent(int port = 0, bool activateLog = false, IDictionary<string, string> additionalMimeTypes = null) :
+        this(GetDefaultFileProvider(), port, activateLog, additionalMimeTypes)
+        { }
+
+        private static IFileProvider GetDefaultFileProvider()
+        {
+            return new PhysicalFileProvider(Path.Combine(System.Environment.CurrentDirectory, "app"));
         }
 
         public string ToWebviewUrl()
