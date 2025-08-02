@@ -2,9 +2,6 @@ name: ReleaseBuild
 on:
   release:
     types: [published]
-  push:
-    branches:
-      - feature/aotnuget
 
 jobs:
   build:
