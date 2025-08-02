@@ -1,5 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json;
 using SharpWebview.Content;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -206,10 +205,11 @@ namespace SharpWebview
             // This method opens the url parameter in the system browser
             Bind("openExternalLink", (id, req) =>
             {
-                dynamic args = JsonConvert.DeserializeObject(req);
+                string url = ExtractUrlArgument(req);
+
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
-                    FileName = args[0],
+                    FileName = url,
                     UseShellExecute = true
                 };
                 Process.Start (psi);
@@ -246,6 +246,26 @@ namespace SharpWebview
                     document.attachEvent('onclick', interceptClickEvent);
                 }
             ");
+        }
+
+        private string ExtractUrlArgument(string jsonArray)
+        {
+            if (string.IsNullOrWhiteSpace(jsonArray))
+                return string.Empty;
+
+            jsonArray = jsonArray.Trim();
+
+            // Expected format: ["http..."]
+            if (!jsonArray.StartsWith("[\"http") || !jsonArray.Contains("\"]"))
+                return string.Empty;
+
+            int startIndex = 2; // After ["
+            int endIndex = jsonArray.IndexOf("\"]", startIndex);
+
+            if (endIndex == -1)
+                return string.Empty;
+
+            return jsonArray.Substring(startIndex, endIndex - startIndex);
         }
 
         private bool? CheckLoopbackException(string url)

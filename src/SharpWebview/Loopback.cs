@@ -40,7 +40,7 @@ namespace SharpWebview
         {
             var size = 0u;
             var arrayValue = IntPtr.Zero;
-            var structSize = Marshal.SizeOf(typeof(FirewallAppContainer));
+            var structSize = Marshal.SizeOf<FirewallAppContainer>();
 
             var handle_pdwCntPublicACs = GCHandle.Alloc(size, GCHandleType.Pinned);
             var handle_ppACs = GCHandle.Alloc(arrayValue, GCHandleType.Pinned);
@@ -50,7 +50,7 @@ namespace SharpWebview
             var firewallApps = new List<FirewallAppContainer>();
             for (var i = 0; i < size; i++)
             {
-                var cur = (FirewallAppContainer) Marshal.PtrToStructure(arrayValue, typeof(FirewallAppContainer));
+                var cur = (FirewallAppContainer)Marshal.PtrToStructure<FirewallAppContainer>(arrayValue);
                 firewallApps.Add(cur);
                 arrayValue = new IntPtr((long)arrayValue + structSize);
             }
@@ -65,7 +65,7 @@ namespace SharpWebview
         {
             var size = 0u;
             var arrayValue = IntPtr.Zero;
-            var structSize = Marshal.SizeOf(typeof(SidAndAttributes));
+            var structSize = Marshal.SizeOf<SidAndAttributes>();
 
             var handle_pdwCntPublicACs = GCHandle.Alloc(size, GCHandleType.Pinned);
             var handle_ppACs = GCHandle.Alloc(arrayValue, GCHandleType.Pinned);
@@ -75,7 +75,7 @@ namespace SharpWebview
             var firewallAppConfigs = new List<SidAndAttributes>();
             for (var i = 0; i < size; i++)
             {
-                var currentConfig = (SidAndAttributes)Marshal.PtrToStructure(arrayValue, typeof(SidAndAttributes));
+                var currentConfig = (SidAndAttributes)Marshal.PtrToStructure<SidAndAttributes>(arrayValue);
                 firewallAppConfigs.Add(currentConfig);
                 arrayValue = new IntPtr((long)arrayValue + structSize);
             }
