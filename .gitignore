@@ -7,3 +7,5 @@ Files.wxs
 *.wixobj
 *.wixpdb
 *.msi
+_deps/
+CMakeFiles/
