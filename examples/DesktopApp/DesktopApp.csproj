@@ -32,8 +32,11 @@
   <Target Name="CopyDll2" AfterTargets="CopyDll">
     <Copy SourceFiles="..\..\libs\WebView2Loader.dll" DestinationFolder="$(OutDir)" />
   </Target>
-  <Target Name="CopyDyLib" AfterTargets="CopyDll2">
-    <Copy SourceFiles="..\..\libs\libwebview.dylib" DestinationFolder="$(OutDir)" />
+  <Target Name="CopyDyARMLib" AfterTargets="CopyDll2">
+    <Copy SourceFiles="..\..\libs\libwebview-arm64.dylib" DestinationFolder="$(OutDir)" />
+  </Target>
+  <Target Name="CopyDyX64Lib" AfterTargets="CopyDll2">
+    <Copy SourceFiles="..\..\libs\libwebview-x64.dylib" DestinationFolder="$(OutDir)" />
   </Target>
   <Target Name="CopySo" AfterTargets="CopyDyLib">
     <Copy SourceFiles="..\..\libs\libwebview.so" DestinationFolder="$(OutDir)" />
