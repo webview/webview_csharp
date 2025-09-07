@@ -273,7 +273,7 @@ namespace SharpWebview
             // https://docs.microsoft.com/de-de/windows/win32/sysinfo/operating-system-version
             if(Environment.OSVersion.Version.Major < 6 || (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor < 2))
                 return true;
-            else if(url.Contains("localhost") && !url.Contains("127.0.0.1"))
+            else if(!url.Contains("localhost") && !url.Contains("127.0.0.1"))
                 return null;
 
             var loopBack = new Loopback();
