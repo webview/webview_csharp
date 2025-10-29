@@ -39,6 +39,15 @@ namespace SharpWebview
         }
 
         /// <summary>
+        /// Returns the native window handle associated with the webview.
+        /// </summary>
+        /// <returns>The native window handle (GtkWindow*, NSWindow*, or HWND depending on platform).</returns>
+        public IntPtr GetWindow()
+        {
+            return Bindings.webview_get_window(_nativeWebview);
+        }
+
+        /// <summary>
         /// Set the title of the webview application window.
         /// </summary>
         /// <param name="title">The new title.</param>

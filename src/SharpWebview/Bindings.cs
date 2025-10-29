@@ -242,13 +242,20 @@ namespace SharpWebview
             RPCResult result,
             [MarshalAs(UnmanagedType.LPUTF8Str)] string resultJson);
 
-        /*
-        Not mapped:
-
-            // Returns a native window handle pointer. When using GTK backend the pointer
-            // is GtkWindow pointer, when using Cocoa backend the pointer is NSWindow
-            // pointer, when using Win32 backend the pointer is HWND pointer.
-            WEBVIEW_API void *webview_get_window(webview_t w);
-        */
+        /// <summary>
+        /// <para>
+        /// Returns the native handle of the window associated with the webview instance.
+        /// The handle can be a GtkWindow pointer (GTK), NSWindow pointer (Cocoa)
+        /// or HWND (Win32).
+        /// </para>
+        /// <para>
+        /// Binding for:
+        /// WEBVIEW_API void *webview_get_window(webview_t w);
+        /// </para>
+        /// </summary>
+        /// <param name="webview">The webview instance.</param>
+        /// <returns>The handle of the native window.</returns>
+        [DllImport(DllFile, CallingConvention = CallingConvention.Cdecl)]
+        internal extern static IntPtr webview_get_window(IntPtr webview);
     }
 }
