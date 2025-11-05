@@ -14,6 +14,7 @@ namespace SharpWebview
     {
         private bool _disposed = false;
         private bool? _loopbackEnabled = null;
+        private bool _skipLoopbackCheck = false;
         private List<CallBackFunction> callbacks = new List<CallBackFunction>();
         private List<DispatchFunction> dispatchFunctions = new List<DispatchFunction>();
 
@@ -29,13 +30,17 @@ namespace SharpWebview
         /// <param name="interceptExternalLinks">
         /// Set to true, top open external links in system browser.
         /// </param>
-        public Webview(bool debug = false, bool interceptExternalLinks = false)
+        /// <param name="skipLoopbackCheck">
+        /// Set to true to skip checking for the loopback exception.
+        /// </param>
+        public Webview(bool debug = false, bool interceptExternalLinks = false, bool skipLoopbackCheck = false)
         {
             _nativeWebview = Bindings.webview_create(debug ? 1 : 0, IntPtr.Zero);
             if(interceptExternalLinks)
             {
                 InterceptExternalLinks();
             }
+            _skipLoopbackCheck = skipLoopbackCheck;
         }
 
         /// <summary>
@@ -279,8 +284,10 @@ namespace SharpWebview
 
         private bool? CheckLoopbackException(string url)
         {
+            if (_skipLoopbackCheck)
+                return true;
             // https://docs.microsoft.com/de-de/windows/win32/sysinfo/operating-system-version
-            if(Environment.OSVersion.Version.Major < 6 || (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor < 2))
+            else if(Environment.OSVersion.Version.Major < 6 || (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor < 2))
                 return true;
             else if(!url.Contains("localhost") && !url.Contains("127.0.0.1"))
                 return null;
