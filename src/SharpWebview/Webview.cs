@@ -1,7 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
 using SharpWebview.Content;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -27,16 +25,12 @@ namespace SharpWebview
         /// Set to true, to activate a debug view, 
         /// if the current webview implementation supports it.
         /// </param>
-        /// <param name="interceptExternalLinks">
-        /// Set to true, top open external links in system browser.
+        /// <param name="native">
+        /// 
         /// </param>
-        public Webview(bool debug = false, bool interceptExternalLinks = false)
+        public Webview(bool debug = false, nint native = 0)
         {
-            _nativeWebview = Bindings.webview_create(debug ? 1 : 0, IntPtr.Zero);
-            if(interceptExternalLinks)
-            {
-                InterceptExternalLinks();
-            }
+            _nativeWebview = Bindings.webview_create(debug ? 1 : 0, native);
         }
 
         /// <summary>
@@ -119,13 +113,23 @@ namespace SharpWebview
         }
 
         /// <summary>
+        /// Returns a native window handle pointer. When using GTK backend the pointer
+        /// is GtkWindow pointer, when using Cocoa backend the pointer is NSWindow
+        /// pointer, when using Win32 backend the pointer is HWND pointer.
+        /// </summary>
+        /// <returns></returns>
+        public nint GetNativeHandle()
+        {
+            return Bindings.webview_get_window(_nativeWebview);
+        }
+
+        /// <summary>
         /// Runs the main loop of the webview. Should be used as the last statement.
         /// </summary>
         /// <returns>The webview object.</returns>
-        public Webview Run()
+        public void Run()
         {
             Bindings.webview_run(_nativeWebview);
-            return this;
         }
 
         /// <summary>
@@ -183,6 +187,10 @@ namespace SharpWebview
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Disposes the resources.
+        /// </summary>
+        /// <param name="disposing">Whether dispose managed resource.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed)
@@ -204,48 +212,48 @@ namespace SharpWebview
         {
             // Bind a native method as javascript
             // This method opens the url parameter in the system browser
-            Bind("openExternalLink", (id, req) =>
-            {
-                dynamic args = JsonConvert.DeserializeObject(req);
-                ProcessStartInfo psi = new ProcessStartInfo
-                {
-                    FileName = args[0],
-                    UseShellExecute = true
-                };
-                Process.Start (psi);
+            //Bind("openExternalLink", (id, req) =>
+            //{
+            //    dynamic args = JsonConvert.DeserializeObject(req);
+            //    ProcessStartInfo psi = new ProcessStartInfo
+            //    {
+            //        FileName = args[0],
+            //        UseShellExecute = true
+            //    };
+            //    Process.Start (psi);
 
-                Return(id, RPCResult.Success, "{}");
-            });
+            //    Return(id, RPCResult.Success, "{}");
+            //});
 
             // On Init of the webview we inject some javascript
             // This javascript intercepts all click events and checks,
             // if the intercepted click is an external link.
             // In case of an external link the registered native method is called.
-            InitScript(@"
-                function interceptClickEvent(e) {
-                    var href = '';
-                    var target = e.target || e.srcElement;
-                    if (target.tagName === 'A') {
-                        href = target.getAttribute('href');
-                    }
-                    else if(target.tagName === 'IMG') {
-                        href = target.parentElement.getAttribute('href');
-                    }
-                    if(href.startsWith('http') 
-                        && !href.startsWith('http://localhost')
-                        && !href.startsWith('http://127.0.0.1')
-                    ) {
-                        openExternalLink(href);
-                        e.preventDefault();
-                    }
-                }
+            //InitScript(@"
+            //    function interceptClickEvent(e) {
+            //        var href = '';
+            //        var target = e.target || e.srcElement;
+            //        if (target.tagName === 'A') {
+            //            href = target.getAttribute('href');
+            //        }
+            //        else if(target.tagName === 'IMG') {
+            //            href = target.parentElement.getAttribute('href');
+            //        }
+            //        if(href.startsWith('http') 
+            //            && !href.startsWith('http://localhost')
+            //            && !href.startsWith('http://127.0.0.1')
+            //        ) {
+            //            openExternalLink(href);
+            //            e.preventDefault();
+            //        }
+            //    }
 
-                if (document.addEventListener) {
-                    document.addEventListener('click', interceptClickEvent);
-                } else if (document.attachEvent) {
-                    document.attachEvent('onclick', interceptClickEvent);
-                }
-            ");
+            //    if (document.addEventListener) {
+            //        document.addEventListener('click', interceptClickEvent);
+            //    } else if (document.attachEvent) {
+            //        document.attachEvent('onclick', interceptClickEvent);
+            //    }
+            //");
         }
 
         private bool? CheckLoopbackException(string url)
@@ -260,6 +268,9 @@ namespace SharpWebview
             return loopBack.IsWebViewLoopbackEnabled();
         }
 
+        /// <summary>
+        /// 析构函数
+        /// </summary>
         ~Webview() => Dispose(false);
     }
 }
