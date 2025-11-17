@@ -1,3 +1,5 @@
+#if NET7_0_OR_GREATER
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.StaticFiles;
@@ -56,3 +58,5 @@ namespace SharpWebview.Content
         }
     }
 }
+
+#endif

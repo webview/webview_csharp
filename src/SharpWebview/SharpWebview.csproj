@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net7.0;net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(PublishAot)' == 'true'">net7.0;net8.0;net9.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>SharpWebview</AssemblyName>
     <Authors>Gerrit 'Geaz' Gazic</Authors>
@@ -11,6 +12,7 @@
     <PackageVersion>0.12.1</PackageVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/webview/webview_csharp</PackageProjectUrl>
+    <NoWarn>CS1591</NoWarn> <!-- mute missing documentation warnings -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,8 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" Condition="'$(TargetFramework)' != 'netstandard2.1'" />
   </ItemGroup>
 
 </Project>

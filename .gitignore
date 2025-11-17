@@ -3,6 +3,7 @@ obj/
 build/
 *.nupkg
 .vs/
+.idea/
 Files.wxs
 *.wixobj
 *.wixpdb
