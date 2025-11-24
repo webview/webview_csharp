@@ -188,6 +188,14 @@ namespace SharpWebview
         }
 
         /// <summary>
+        /// Terminates the webview.
+        /// </summary>
+        public void Terminate()
+        {
+            Bindings.webview_terminate(_nativeWebview);
+        }
+
+        /// <summary>
         /// Disposes the current webview.
         /// </summary>
         public void Dispose()
